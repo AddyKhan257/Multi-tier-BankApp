@@ -1,0 +1,54 @@
+services:
+ 
+  mysql:
+    image: mysql-cont
+    container_name: mysql-bankapp
+    environment: 
+      MYSQL_ROOT_PASSWORD: Test@123
+      MYSQL_DATABASE: bankappdb
+    
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pTest@123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+      
+    ports: 
+      - "3306:3306"
+
+    volumes:
+      - mysql-vol:/var/lib/mysql
+
+
+    networks:
+      - bankapp-nw
+
+
+  Bankapp:
+    image: ai-bankapp
+    container_name: bankapp
+    ports:
+      - "8080:8080"
+    environment:
+      MYSQL_HOST: mysql-bankapp
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: bankappdb
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Test@123
+
+    depends_on: 
+      mysql:
+        condition: service_healthy
+    networks:
+      - bankapp-nw
+
+
+networks:
+  bankapp-nw:
+    driver: bridge
+
+volumes: 
+  mysql-vol:
+
