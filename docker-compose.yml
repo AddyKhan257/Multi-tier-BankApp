@@ -1,7 +1,7 @@
 services:
  
   mysql:
-    image: mysql-cont
+    image: mohammadadnankhan/mysql-cont
     container_name: mysql-bankapp
     environment: 
       MYSQL_ROOT_PASSWORD: Test@123
@@ -27,7 +27,7 @@ services:
 
 
   Bankapp:
-    image: ai-bankapp
+    image: mohammadadnankhan/ai-bankapp
     container_name: bankapp
     ports:
       - "8080:8080"
@@ -35,15 +35,28 @@ services:
       MYSQL_HOST: mysql-bankapp
       MYSQL_PORT: 3306
       MYSQL_DATABASE: bankappdb
-      MYSQL_USER: root
+      MYSQL_USER: root  
       MYSQL_PASSWORD: Test@123
-
+      OLLAMA_URL: http://ollama:11434
     depends_on: 
       mysql:
         condition: service_healthy
+
     networks:
       - bankapp-nw
 
+
+  ollama: 
+    image: mohammadadnankhan/ollama
+    container_name: ollama_AI
+    ports: 
+      - "11434:11434"
+    networks:
+      - bankapp-nw
+    volumes:
+      - ollama_data:/root/.ollama    
+
+        
 
 networks:
   bankapp-nw:
@@ -51,4 +64,4 @@ networks:
 
 volumes: 
   mysql-vol:
-
+  ollama_data:
