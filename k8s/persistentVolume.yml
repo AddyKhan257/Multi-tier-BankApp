@@ -1,0 +1,22 @@
+kind: PersistentVolume
+
+apiVersion: v1
+
+metadata:
+  name: mysql-pv 
+  labels:
+    app: mysql
+
+spec:
+  storageClassName: manual
+    
+  capacity:
+    storage: 5Gi
+
+  acessMode:
+    - ReadWriteOnce
+
+  hostPath:
+    path: /mnt/data/mysql  
+
+    
