@@ -13,7 +13,7 @@ spec:
   capacity:
     storage: 5Gi
 
-  acessModes:
+  accessModes:
     - ReadWriteOnce
 
   hostPath:
